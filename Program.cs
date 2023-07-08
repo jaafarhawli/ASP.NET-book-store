@@ -30,22 +30,4 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Display data
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<BookstoreContext>();
-    DisplayData(context);
-}
-
 app.Run();
-
-void DisplayData(BookstoreContext context)
-{
-    var books = context.Books.ToList();
-    foreach (var book in books)
-    {
-        Console.WriteLine($"ID: {book.BookID}, Title: {book.Title}");
-    }
-}
-
