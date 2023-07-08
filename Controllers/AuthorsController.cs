@@ -57,13 +57,9 @@ namespace OnlineBookstore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AuthorID,FirstName,LastName,Bio")] Author author)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(author);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(author);
+            _context.Add(author);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Authors/Edit/5
@@ -94,27 +90,9 @@ namespace OnlineBookstore.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(author);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AuthorExists(author.AuthorID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(author);
+            _context.Update(author);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Authors/Delete/5

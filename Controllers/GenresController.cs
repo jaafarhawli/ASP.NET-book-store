@@ -57,13 +57,9 @@ namespace OnlineBookstore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("GenreID,GenreName")] Genre genre)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(genre);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(genre);
+            _context.Add(genre);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Genres/Edit/5
@@ -94,27 +90,9 @@ namespace OnlineBookstore.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(genre);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GenreExists(genre.GenreID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(genre);
+            _context.Update(genre);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Genres/Delete/5

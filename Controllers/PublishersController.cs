@@ -57,14 +57,12 @@ namespace OnlineBookstore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PublisherID,PublisherName,Address")] Publisher publisher)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(publisher);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(publisher);
+            _context.Add(publisher);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
+
+        // ...
 
         // GET: Publishers/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -83,8 +81,6 @@ namespace OnlineBookstore.Controllers
         }
 
         // POST: Publishers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PublisherID,PublisherName,Address")] Publisher publisher)
@@ -94,27 +90,9 @@ namespace OnlineBookstore.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(publisher);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PublisherExists(publisher.PublisherID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(publisher);
+            _context.Update(publisher);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Publishers/Delete/5

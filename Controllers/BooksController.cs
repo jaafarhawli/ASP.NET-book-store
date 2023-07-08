@@ -62,16 +62,9 @@ namespace OnlineBookstore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("BookID,Title,AuthorID,GenreID,Price,ISBN,PublisherID,PublicationDate")] Book book)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(book);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["AuthorID"] = new SelectList(_context.Authors, "AuthorID", "AuthorID", book.AuthorID);
-            ViewData["GenreID"] = new SelectList(_context.Genres, "GenreID", "GenreID", book.GenreID);
-            ViewData["PublisherID"] = new SelectList(_context.Publishers, "PublisherID", "PublisherID", book.PublisherID);
-            return View(book);
+            _context.Add(book);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Books/Edit/5
@@ -105,30 +98,9 @@ namespace OnlineBookstore.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(book);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BookExists(book.BookID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["AuthorID"] = new SelectList(_context.Authors, "AuthorID", "AuthorID", book.AuthorID);
-            ViewData["GenreID"] = new SelectList(_context.Genres, "GenreID", "GenreID", book.GenreID);
-            ViewData["PublisherID"] = new SelectList(_context.Publishers, "PublisherID", "PublisherID", book.PublisherID);
-            return View(book);
+            _context.Update(book);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Books/Delete/5
@@ -166,14 +138,14 @@ namespace OnlineBookstore.Controllers
             {
                 _context.Books.Remove(book);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BookExists(int id)
         {
-          return (_context.Books?.Any(e => e.BookID == id)).GetValueOrDefault();
+            return (_context.Books?.Any(e => e.BookID == id)).GetValueOrDefault();
         }
     }
 }

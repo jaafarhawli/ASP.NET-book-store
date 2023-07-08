@@ -60,16 +60,12 @@ namespace OnlineBookstore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ReviewID,UserID,BookID,Rating,ReviewText,ReviewDate")] Review review)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(review);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["BookID"] = new SelectList(_context.Books, "BookID", "BookID", review.BookID);
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", review.UserID);
-            return View(review);
+            _context.Add(review);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
+
+        // ...
 
         // GET: Reviews/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -90,8 +86,6 @@ namespace OnlineBookstore.Controllers
         }
 
         // POST: Reviews/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ReviewID,UserID,BookID,Rating,ReviewText,ReviewDate")] Review review)
@@ -101,30 +95,11 @@ namespace OnlineBookstore.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(review);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReviewExists(review.ReviewID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["BookID"] = new SelectList(_context.Books, "BookID", "BookID", review.BookID);
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", review.UserID);
-            return View(review);
+            _context.Update(review);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
+
 
         // GET: Reviews/Delete/5
         public async Task<IActionResult> Delete(int? id)

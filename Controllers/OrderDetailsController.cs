@@ -60,15 +60,9 @@ namespace OnlineBookstore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("OrderDetailID,OrderID,BookID,Quantity,Price")] OrderDetail orderDetail)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(orderDetail);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["BookID"] = new SelectList(_context.Books, "BookID", "BookID", orderDetail.BookID);
-            ViewData["OrderID"] = new SelectList(_context.Orders, "OrderID", "OrderID", orderDetail.OrderID);
-            return View(orderDetail);
+            _context.Add(orderDetail);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: OrderDetails/Edit/5
@@ -101,29 +95,9 @@ namespace OnlineBookstore.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(orderDetail);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OrderDetailExists(orderDetail.OrderDetailID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["BookID"] = new SelectList(_context.Books, "BookID", "BookID", orderDetail.BookID);
-            ViewData["OrderID"] = new SelectList(_context.Orders, "OrderID", "OrderID", orderDetail.OrderID);
-            return View(orderDetail);
+            _context.Update(orderDetail);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: OrderDetails/Delete/5
